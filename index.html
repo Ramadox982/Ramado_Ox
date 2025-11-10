@@ -7,16 +7,15 @@
     body {
       margin: 0;
       padding: 0;
-      background: url('ramado.jpg') no-repeat center center fixed;
-      background-size: cover;
+      background: linear-gradient(to bottom right, #000000, #1a1a1a);
       font-family: Arial, sans-serif;
       color: #fff;
       text-align: center;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     .smoke {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -26,6 +25,7 @@
       animation: smokeMove 60s linear infinite;
       opacity: 0.2;
       mix-blend-mode: screen;
+      z-index: 0;
     }
 
     @keyframes smokeMove {
@@ -36,8 +36,7 @@
     .profile {
       position: relative;
       z-index: 2;
-      margin-top: 100px;
-      display: inline-block;
+      margin-top: 80px;
     }
 
     .glow {
@@ -61,6 +60,35 @@
       position: relative;
       z-index: 2;
     }
+
+    .form-container {
+      margin-top: 40px;
+      z-index: 2;
+      position: relative;
+    }
+
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #00ffcc;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -70,5 +98,67 @@
     <div class="glow"></div>
     <img src="ramadox (1).jpg" alt="Ramado Profile">
   </div>
+
+  <div class="form-container">
+    <h2>تسجيل حساب</h2>
+    <input type="email" id="email" placeholder="أدخل بريد Gmail فقط">
+    <input type="password" id="password" placeholder="كلمة المرور">
+    <button onclick="register()">تسجيل</button>
+
+    <h2>تسجيل دخول</h2>
+    <input type="email" id="loginEmail" placeholder="بريد Gmail">
+    <input type="password" id="loginPassword" placeholder="كلمة المرور">
+    <button onclick="login()">دخول</button>
+
+    <p id="message"></p>
+  </div>
+
+  <script>
+    let users = {};
+
+    function validateEmail(email) {
+      return email.endsWith("@gmail.com");
+    }
+
+    function validatePassword(password) {
+      return /[A-Z]/.test(password) &&
+             /[a-z]/.test(password) &&
+             /[0-9]/.test(password) &&
+             /[^A-Za-z0-9]/.test(password);
+    }
+
+    function register() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!validateEmail(email)) {
+        showMessage("البريد يجب أن يكون Gmail فقط");
+        return;
+      }
+
+      if (!validatePassword(password)) {
+        showMessage("كلمة المرور يجب أن تحتوي على حروف كبيرة وصغيرة وأرقام ورموز");
+        return;
+      }
+
+      users[email] = password;
+      showMessage("تم التسجيل بنجاح");
+    }
+
+    function login() {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      if (users[email] && users[email] === password) {
+        showMessage("تم تسجيل الدخول بنجاح");
+      } else {
+        showMessage("فشل تسجيل الدخول. تأكد من التسجيل أولاً.");
+      }
+    }
+
+    function showMessage(msg) {
+      document.getElementById("message").textContent = msg;
+    }
+  </script>
 </body>
 </html>
